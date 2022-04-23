@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: raw customers data
+    columns:
+      - name: customer_id
+        description: customer key
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_orders
+    decription: raw order data 
+    columns:
+      - name: order_id
+        description: order key
+        tests:
+          - unique
+          - not_null
+      - name: status
+        #description: "{{doc('order_status')}}"
+        tests:
+          - accepted_values:
+              values:
+                - completed
+                - shipped
+                - returned
+                - return_pending
+                - placed
+      - name: customer_id
+        description: Foreign Key
+        tests:
+          - relashionships:
+              to: ref('stg_customers')
+              field: customer_id
